@@ -20,19 +20,20 @@ mutate(across(where(is.character), as.factor))
 ```
 ### Data is from the Patient_Info dataset from South Korea 1 Jan to 1 May 2020
 ### This data was retrieved from a downloadable zip file from kaggle
-
+  
 Some of the data was uncoded for sex - sex must be just male or female
 77 of the data entries were coded sex  as blank, so we omit these.
 state of a patient must be died or alive - we adjust that as well   
   
 # Your Question - Is dying independent of sex?
 
-
+  
 As we look at the data, the appropriate variables to use would be either sex that
 is all lowercase or Sex with the uppercase S and I feel that the appropriate one
 would be the Sex with the uppercase because the variable are just F and M. The
 second variable that would apply to this would be the result because the only ones
 you can use are alive or dead, two options.
+
 ## Graphical results - use ggplot commands to do this  
 
 
@@ -51,21 +52,43 @@ basicCC <- ggplot(dd2,aes(x=result,y=prcnt*100,fill=Sex))
 basicCC + geom_bar(stat="identity", position = "dodge")
 ```
    
-As we look at the graphs, we see that there were more women than men in the alive graph. The dead pile shows more men that were dead than female. The alive pile represents approximately 55% of people that were female and approximately 45% that were male. When looking at the dead graph, it shows approximately 37% that were female while approximately 63% were male. Even though there were more females that caught Covid, the ones dying were the males 2-1.
+As we look at the graphs, we see that there were more women than men in the alive 
+graph. The dead pile shows more men that were dead than female. The alive pile
+represents approximately 55% of people that were female and approximately 45% that
+were male. When looking at the dead graph, it shows approximately 37% that were
+female while approximately 63% were male. Even though there were more females that
+caught Covid, the ones dying were the males 2-1.
 
-
-
-
-
-  
 ## Numerical results
 
-
+```{r}
+table1 <- xtabs(~result + Sex, data=kRdata)
+rowPerc(table1)
+colPerc(table1)
+```
+  
+When looking at these results, we see that of the dead people, about more than 
+twice were male. At 1.4% of females were dead whereas 3% of males were dead. This
+is showing that it was killing males at double the rate than the females.
 
 ## Inferential results 
 
-
-
+```{r}
+chisq.test(table1)
+chisqtestGC(table1)
+fisher.test(table1)
+```
+  
+The females were from a population of a total of 1856 shows that 25 dies whereas 
+in the male population of 1455, 44 died. There wasn't a difference between the
+sexes of who was getting killed. In the fishers exact test, the odds of dying if
+you're a man is 2.3 times more than if you were a woman.
 
 ## Conclusions
-
+  
+As we entered the codes we got some unexpected results. This showed us that sex 
+did not play a role in who was dying. There were more female than male in the
+graphical results but that didn't matter.Males died at a rate of 2.3 times faster
+rate than the female. The total population of men was 1455, yet 44 died whereas
+the women had a population of 1856 and only 25 died. To conclude, the results were
+not what we expected.
